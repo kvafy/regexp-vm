@@ -411,8 +411,18 @@ public class PatternTest extends Assert {
     }
 
     @Test(expected = RuntimeException.class)
-    public void backreferenceWhenNoCapturingGroup_failedCompile() {
+    public void backreferenceNonExistingCapturingGroup_failedCompile() {
         Pattern.compile("abc\\1");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void backreferenceInsideCapturingGroupDefinition_failedCompile() {
+        Pattern.compile("abc(def\\1)");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void backreferenceBeforeCapturingGroupDefined_failedCompile() {
+        Pattern.compile("abc\\1(def)");
     }
 
     @Test(expected = RuntimeException.class)
