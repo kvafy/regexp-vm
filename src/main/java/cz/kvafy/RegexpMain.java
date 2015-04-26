@@ -4,8 +4,6 @@ import cz.kvafy.regexp.*;
 
 //TODO unit tests
 //TODO regexp enhancements:
-//       * detect number of groups
-//       * backreferences with correct detection of 
 //       * repetition operators +,? (greedy and non-greedy variants)
 //       * non-capturing parens (:?)
 

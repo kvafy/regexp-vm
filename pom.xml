@@ -21,14 +21,13 @@
   
   <build>
     <plugins>
-      <!--
 	  <plugin>
 	    <groupId>org.antlr</groupId>
 	    <artifactId>antlr4-maven-plugin</artifactId>
 	    <version>4.1</version>
 	    <configuration>
 	      <sourceDirectory>${basedir}/src/main/resources/antlr4</sourceDirectory>
-	      <packageName>cz.kvafy.regexp</packageName>
+          <visitor>true</visitor>
 	    </configuration>
 	    <executions>
 	      <execution>
@@ -38,8 +37,7 @@
 	      </execution>
 	    </executions>
 	  </plugin>
-	  -->
-	  
+
 	  <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>

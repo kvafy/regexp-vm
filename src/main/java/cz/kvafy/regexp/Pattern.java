@@ -47,7 +47,10 @@ public class Pattern {
         catch(RuntimeException ex) {
             throw new IllegalArgumentException("Error compiling pattern \"" + pattern + "\": " + ex.getMessage());
         }
-        
+
+        // possibly throw exceptions
+        makeSemanticChecks(tree);
+
         // process the abstract syntax tree using a visit to build VM code
         RegexpTreeToVMCodeVisitor visitor = new RegexpTreeToVMCodeVisitor();
         VMCode vmCode = visitor.visit(tree);
@@ -73,5 +76,10 @@ public class Pattern {
      */
     public String pattern() {
         return this.pattern;
+    }
+
+    private static void makeSemanticChecks(ParseTree tree) {
+        SemanticCheckerVisitor semanticChecker = new SemanticCheckerVisitor();
+        semanticChecker.visit(tree);
     }
 }

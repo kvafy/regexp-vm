@@ -332,6 +332,16 @@ public class PatternTest extends Assert {
         Matcher matcher = pattern.matcher(text);
         assertFalse(matcher.matches());
     }
+
+    @Test(expected = RuntimeException.class)
+    public void backreferenceWhenNoCapturingGroup_failedCompile() {
+        Pattern.compile("abc\\1");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void backreferenceTooHighNumer_failedCompile() {
+        Pattern.compile("(abc)\\1\\2");
+    }
     
     @Test(expected=IllegalArgumentException.class)
     public void unbalancedBrackets_fail() {
