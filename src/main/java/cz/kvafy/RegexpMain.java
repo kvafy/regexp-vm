@@ -2,11 +2,6 @@ package cz.kvafy;
 
 import cz.kvafy.regexp.*;
 
-//TODO unit tests
-//TODO regexp enhancements:
-//       * repetition operators +,? (greedy and non-greedy variants)
-//       * non-capturing parens (:?)
-
 public class RegexpMain {
 
     public static void main(String[] args) {
@@ -28,7 +23,7 @@ public class RegexpMain {
             String errorMsg = null;
             Matcher matcher = pattern.matcher(input);
             if(matcher.matches() == expectedResult) {
-                if(expectedResult == true) {
+                if(expectedResult) {
                     // group tests
                     java.util.regex.Matcher standardMatcher = standardMatcher(pattern.pattern(), input);
                     standardMatcher.matches(); // force the match

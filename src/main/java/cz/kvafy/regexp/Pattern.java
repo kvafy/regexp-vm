@@ -2,11 +2,6 @@ package cz.kvafy.regexp;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.DefaultErrorStrategy;
-import org.antlr.v4.runtime.InputMismatchException;
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class Pattern {
@@ -79,7 +74,7 @@ public class Pattern {
     }
 
     private static void makeSemanticChecks(ParseTree tree) {
-        SemanticCheckerVisitor semanticChecker = new SemanticCheckerVisitor();
+        BackreferenceSemanticCheckerVisitor semanticChecker = new BackreferenceSemanticCheckerVisitor();
         semanticChecker.visit(tree);
     }
 }

@@ -125,6 +125,18 @@ public class PatternTest extends Assert {
         assertEquals(text, matcher.group());
         assertEquals(text, matcher.group(0));
     }
+
+    @Test
+    public void greedyStarMatch_takesMaximum() {
+        String text = "aaaaa";
+        Pattern pattern = Pattern.compile("(a*)(a*)");
+        Matcher matcher = pattern.matcher(text);
+        assertTrue("Matcher not matching", matcher.matches());
+        assertEquals(text, matcher.group());
+        assertEquals(text, matcher.group(0));
+        assertEquals(text, matcher.group(1));
+        assertEquals("", matcher.group(2));
+    }
     
     @Test
     public void greedyStarMatch_failOnPrefix() {
@@ -150,6 +162,18 @@ public class PatternTest extends Assert {
         assertTrue("Matcher not matching", matcher.matches());
         assertEquals(text, matcher.group());
         assertEquals(text, matcher.group(0));
+    }
+
+    @Test
+    public void nongreedyStarMatch_takesMinimum() {
+        String text = "aaaaa";
+        Pattern pattern = Pattern.compile("(a*?)(a*?)");
+        Matcher matcher = pattern.matcher(text);
+        assertTrue("Matcher not matching", matcher.matches());
+        assertEquals(text, matcher.group());
+        assertEquals(text, matcher.group(0));
+        assertEquals("", matcher.group(1));
+        assertEquals(text, matcher.group(2));
     }
     
     @Test
@@ -200,6 +224,16 @@ public class PatternTest extends Assert {
         assertEquals(text, matcher.group());
         assertEquals(text, matcher.group(0));
     }
+
+    @Test
+    public void greedyPlusMatch_takesMaximum() {
+        String text = "aaaaa";
+        Pattern pattern = Pattern.compile("(a+)(a+)");
+        Matcher matcher = pattern.matcher(text);
+        assertTrue(matcher.matches());
+        assertEquals("aaaa", matcher.group(1));
+        assertEquals("a", matcher.group(2));
+    }
     
     @Test
     public void nongreedyPlusMatch() {
@@ -209,6 +243,16 @@ public class PatternTest extends Assert {
         assertTrue(matcher.matches());
         assertEquals(text, matcher.group());
         assertEquals(text, matcher.group(0));
+    }
+
+    @Test
+    public void nongreedyPlusMatch_takesMinimum() {
+        String text = "aaaaa";
+        Pattern pattern = Pattern.compile("(a+?)(a+?)");
+        Matcher matcher = pattern.matcher(text);
+        assertTrue(matcher.matches());
+        assertEquals("a", matcher.group(1));
+        assertEquals("aaaa", matcher.group(2));
     }
     
     @Test
@@ -296,7 +340,16 @@ public class PatternTest extends Assert {
         assertTrue(matcher.matches());
         assertEquals("1", matcher.group(1));
     }
-    
+
+    @Test
+    public void capture_group0TakesAll() {
+        String text = "abc123456";
+        Pattern pattern = Pattern.compile(".*");
+        Matcher matcher = pattern.matcher(text);
+        assertTrue(matcher.matches());
+        assertEquals(text, matcher.group(0));
+    }
+
     @Test
     public void captureTwoBrackets() {
         String text = "aa12aa34aa";
@@ -306,7 +359,16 @@ public class PatternTest extends Assert {
         assertEquals("12", matcher.group(1));
         assertEquals("34", matcher.group(2));
     }
-    
+
+    @Test
+    public void captureIteration_lastPassCaptured() {
+        String text = "ab01";
+        Pattern pattern = Pattern.compile("(ab|01)+");
+        Matcher matcher = pattern.matcher(text);
+        assertTrue(matcher.matches());
+        assertEquals("01", matcher.group(1));
+    }
+
     @Test
     public void backreference_okMatch() {
         String text = "catcat";
@@ -331,6 +393,21 @@ public class PatternTest extends Assert {
         Pattern pattern = Pattern.compile("(cat|dog)\\1");
         Matcher matcher = pattern.matcher(text);
         assertFalse(matcher.matches());
+    }
+
+    @Test
+    public void noncapturingGroupAndCapturingGroups() {
+        String text = "---catdogcat";
+        Pattern patter = Pattern.compile("(:?---)(cat|dog)(dog)\\1");
+        Matcher matcher = patter.matcher(text);
+        assertTrue(matcher.matches());
+        assertEquals("cat", matcher.group(1));
+        assertEquals("dog", matcher.group(2));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void noncapturingGroupCannotBeReferenced_semanticError() {
+        Pattern.compile("(:?cat|dog)\\1");
     }
 
     @Test(expected = RuntimeException.class)

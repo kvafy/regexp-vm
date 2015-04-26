@@ -1,21 +1,25 @@
 package cz.kvafy.regexp;
 
-import org.antlr.v4.runtime.misc.NotNull;
-
 import cz.kvafy.regexp.RegexpParser.*;
 
-public class SemanticCheckerVisitor extends RegexpBaseVisitor<Void> {
+class BackreferenceSemanticCheckerVisitor extends RegexpBaseVisitor<Void> {
 
-    private int maxGroupNumber = 0;
+    private int maxGroupNumber;
 
     @Override
-    public Void visitCapturingGroup(@NotNull CapturingGroupContext ctx) {
+    public Void visitInit(InitContext ctx) {
+        maxGroupNumber = 0;
+        return super.visitInit(ctx);
+    }
+
+    @Override
+    public Void visitCapturingGroup(CapturingGroupContext ctx) {
         maxGroupNumber++;
         return super.visitCapturingGroup(ctx);
     }
 
     @Override
-    public Void visitBackreference(@NotNull BackreferenceContext ctx) {
+    public Void visitBackreference(BackreferenceContext ctx) {
         Integer groupNumber = Integer.valueOf(ctx.DIGIT().getText());
         if(groupNumber > maxGroupNumber)
             throw new RuntimeException(String.format("Encountered invalid backreference '%s'", ctx.getText()));
